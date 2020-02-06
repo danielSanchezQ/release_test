@@ -25,6 +25,16 @@ jobs:
           draft: false
           prerelease: false
 
+      - name: Dump release url
+        run: ${{ steps.create_release.upload_url }} >> release_url.txt
+
+      - name: Upload math result for job
+          uses: actions/upload-artifact@v1
+          with:
+            name: release_url
+            path: release_url.txt
+
+
   release_assets:
     name: Release assets
     runs-on: ${{ matrix.config.os }}
@@ -90,7 +100,16 @@ jobs:
 
       - name: Get the version
         id: get_version
-        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+        run: echo ::set-output name=VERSION::``${GITHUB_REF#refs/tags/}``
+
+      - name: Download math result from relase job
+        uses: actions/download-artifact@v1
+        with:
+          name: release_url
+
+      - name: Get release url
+        id: get_release_url
+        run: echo ::set-output name=RELEASE_URL::``cat release_url.txt``
 
       - name: Pack asset
         uses: montudor/action-zip@v0.1.0
@@ -104,7 +123,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          upload_url: ${{ steps.get_release_url.RELEASE_URL }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
           asset_path: ./release_test-${{ steps.get_version.outputs.VERSION }}-${{ matrix.config.target }}.zip
           asset_name: release_test-${{ steps.get_version.outputs.VERSION }}-${{ matrix.config.target }}.zip
           asset_content_type: application/zip
