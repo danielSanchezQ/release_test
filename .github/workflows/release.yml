@@ -29,10 +29,10 @@ jobs:
         run: ${{ steps.create_release.upload_url }} >> release_url.txt
 
       - name: Upload math result for job
-          uses: actions/upload-artifact@v1
-          with:
-            name: release_url
-            path: release_url.txt
+        uses: actions/upload-artifact@v1
+        with:
+          name: release_url
+          path: release_url.txt
 
 
   release_assets:
