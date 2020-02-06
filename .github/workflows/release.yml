@@ -78,7 +78,8 @@ jobs:
       - name: Build project
         uses: actions-rs/cargo@v1
         with:
-          command: build --release
+          command: rustc
+          args: --release -p release_test --bin release_test -- -C lto
 #        env:
 #          RUSTFLAGS: -C lto
 #        with:
