@@ -102,10 +102,13 @@ jobs:
         id: get_version
         run: echo ::set-output name=VERSION::``${GITHUB_REF#refs/tags/}``
 
-      - name: Download math result from relase job
+      - name: Download release url file
         uses: actions/download-artifact@v1
         with:
           name: release_url
+
+      - name: Read file test
+        run: cat release_url.txt
 
       - name: Get release url
         id: get_release_url
