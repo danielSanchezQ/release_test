@@ -27,7 +27,7 @@ jobs:
 
   release_assets:
     name: Release assets
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         cfg:
