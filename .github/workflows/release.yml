@@ -108,7 +108,7 @@ jobs:
           name: release_url
 
       - name: Read file test
-        run: cat release_url.txt
+        run: cat ./release_url/release_url.txt
 
       - name: Get release url
         id: get_release_url
