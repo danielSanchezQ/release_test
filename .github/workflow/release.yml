@@ -1,0 +1,63 @@
+on:
+  push:
+    tags:
+      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+
+
+name: build
+
+jobs:
+  release:
+    name: Release
+    strategy:
+      matrix:
+        cfg:
+          # Linux
+          - {os: ubuntu-latest, target: arm-unknown-linux-gnueabi}
+          - {os: ubuntu-latest, target: armv7-unknown-linux-gnueabihf}
+          - {os: ubuntu-latest, target: mips64el-unknown-linux-gnuabi64}
+          - {os: ubuntu-latest, target: powerpc64le-unknown-linux-gnu}
+          - {os: ubuntu-latest, target: x86_64-unknown-linux-musl}
+          - {os: ubuntu-latest, target: aarch64-linux-android}
+          # Macos
+          - {os: macos-latest, target: x86_64-unknown-linux-gnu}
+          - {os: macos-latest, target: aarch64-unknown-linux-gnu}
+          - {os: macos-latest, target: x86_64-apple-darwin}
+          # Windows
+          - {os: windows-latest, target: x86_64-pc-windows-gnu}
+          - {os: windows-latest, target: x86_64-pc-windows-msvc}
+
+        rust_toolchain: [stable]
+        include:
+          - os: ubuntu-latest
+            target: [
+              arm-unknown-linux-gnueabi,
+              armv7-unknown-linux-gnueabihf,
+              mips64el-unknown-linux-gnuabi64,
+              powerpc64le-unknown-linux-gnu,
+              x86_64-unknown-linux-musl,
+            ]
+            env:
+              DISABLE_TESTS: 1
+          - os: macos-latest
+            target: aarch64-unknown-linux-gnu
+            env:
+              DISABLE_TESTS: 1
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install latest toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{ matrix.os }}
+          override: true
+
+      # `cargo check` command here will use installed `nightly`
+      # as it set as an "override" for current directory
+
+      - name: Run cargo check
+        uses: actions-rs/cargo@v1
+        with:
+          command: check
