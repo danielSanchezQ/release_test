@@ -112,7 +112,7 @@ jobs:
 
       - name: Get release url
         id: get_release_url
-        run: echo "::set-output name=RELEASE_URL::$(cat release_url.txt)"
+        run: echo "::set-output name=RELEASE_URL::$(cat ./release_url/release_url.txt)"
 
       - name: Pack asset
         uses: montudor/action-zip@v0.1.0
