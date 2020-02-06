@@ -88,10 +88,14 @@ jobs:
 #        cargo rustc --target ${{ matrix.target }} --release -p jormungandr --bin jormungandr -- -C lto,
 #        cargo rustc --target ${{ matrix.target }} --release -p jcli        --bin jcli        -- -C lto
 
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+
       - name: Pack asset
         uses: montudor/action-zip@v0.1.0
         with:
-          args: zip --junk-paths release_test-${{ github.ref }}-${{ matrix.config.target }}.zip ./target/release/release_test
+          args: zip --junk-paths release_test-${{ steps.get_version.outputs.VERSION }}-${{ matrix.config.target }}.zip ./target/release/release_test
         #run: zip --junk-paths jormungandr-${{ github.ref }}-${{ matrix.target }}.zip ./target/release/jormungandr ./target/release/jcli
 
       - name: Upload Release Asset
@@ -101,6 +105,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-          asset_path: ./release_test-${{ github.ref }}-${{ matrix.config.target }}.zip
-          asset_name: release_test-${{ github.ref }}-${{ matrix.config.target }}.zip
+          asset_path: ./release_test-${{ steps.get_version.outputs.VERSION }}-${{ matrix.config.target }}.zip
+          asset_name: release_test-${{ steps.get_version.outputs.VERSION }}-${{ matrix.config.target }}.zip
           asset_content_type: application/zip
