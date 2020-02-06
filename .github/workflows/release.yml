@@ -27,6 +27,7 @@ jobs:
 
   release_assets:
     name: Release assets
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         cfg:
@@ -64,7 +65,6 @@ jobs:
 #            env:
 #              DISABLE_TESTS: 1
 
-    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions-rs/toolchain@v1
         with:
