@@ -62,6 +62,12 @@ jobs:
 
     runs-on: ${{ matrix.os }}
     steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain:  ${{ matrix.rust_toolchain }}
+          override: true
+
       - name: Checkout code
         uses: actions/checkout@master
 
@@ -77,21 +83,16 @@ jobs:
           prerelease: false
 
       - name: Build project
-        - uses: actions/checkout@v2
-        - uses: actions-rs/toolchain@v1
-          with:
-            toolchain:  ${{ matrix.rust_toolchain }}
-            override: true
-        - uses: actions-rs/cargo@v1
-          with:
-            command: [
-              cargo rustc --target ${{ matrix.ta786rget }} --release -p release_test --bin release_test -- -C lto,
-              #cargo rustc --target ${{ matrix.target }} --release -p jormungandr --bin jormungandr -- -C lto,
-              #cargo rustc --target ${{ matrix.target }} --release -p jormungandr --bin jcli        -- -C lto
-            ]
+        uses: actions-rs/cargo@v1
+        with:
+          command: [
+            cargo rustc --target ${{ matrix.target }} --release -p release_test --bin release_test -- -C lto,
+            #cargo rustc --target ${{ matrix.target }} --release -p jormungandr --bin jormungandr -- -C lto,
+            #cargo rustc --target ${{ matrix.target }} --release -p jormungandr --bin jcli        -- -C lto
+          ]
 
       - name: Pack asset
-        - uses: montudor/action-zip@v0.1.0
+        uses: montudor/action-zip@v0.1.0
         run: zip --junk-paths release_test-${{ github.ref }}-${{ matrix.target }}.zip ./target/release/release_test
         #run: zip --junk-paths jormungandr-${{ github.ref }}-${{ matrix.target }}.zip ./target/release/jormungandr ./target/release/jcli
 
