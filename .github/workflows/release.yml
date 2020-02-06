@@ -47,15 +47,17 @@ jobs:
         rust_toolchain: [stable]
         include:
           - os: ubuntu-latest
-            target: [
-              arm-unknown-linux-gnueabi,
-              armv7-unknown-linux-gnueabihf,
-              mips64el-unknown-linux-gnuabi64,
-              powerpc64le-unknown-linux-gnu,
-              x86_64-unknown-linux-musl,
-            ]
+            target: arm-unknown-linux-gnueabi
+#            target: [
+#              arm-unknown-linux-gnueabi,
+#              armv7-unknown-linux-gnueabihf,
+#              mips64el-unknown-linux-gnuabi64,
+#              powerpc64le-unknown-linux-gnu,
+#              x86_64-unknown-linux-musl,
+#            ]
             env:
               DISABLE_TESTS: 1
+
           - os: macos-latest
             target: aarch64-unknown-linux-gnu
             env:
