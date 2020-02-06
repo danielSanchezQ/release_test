@@ -71,13 +71,13 @@ jobs:
           toolchain: stable
           override: true
 
-      - name: Checkout code
-        uses: actions/checkout@master
-
-      - name: Build project
-        uses: actions-rs/cargo@v1
-        with:
-          command: cargo rustc --target ${{ matrix.target }} --release -p release_test --bin release_test -- -C lto
+#      - name: Checkout code
+#        uses: actions/checkout@master
+#
+#      - name: Build project
+#        uses: actions-rs/cargo@v1
+#        with:
+#          command: cargo rustc --target ${{ matrix.target }} --release -p release_test --bin release_test -- -C lto
 
         #cargo rustc --target ${{ matrix.target }} --release -p jormungandr --bin jormungandr -- -C lto,
         #cargo rustc --target ${{ matrix.target }} --release -p jcli        --bin jcli        -- -C lto
