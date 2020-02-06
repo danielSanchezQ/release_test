@@ -85,11 +85,10 @@ jobs:
       - name: Build project
         uses: actions-rs/cargo@v1
         with:
-          command: [
-            cargo rustc --target ${{ matrix.target }} --release -p release_test --bin release_test -- -C lto,
-            #cargo rustc --target ${{ matrix.target }} --release -p jormungandr --bin jormungandr -- -C lto,
-            #cargo rustc --target ${{ matrix.target }} --release -p jormungandr --bin jcli        -- -C lto
-          ]
+          command: cargo rustc --target ${{ matrix.target }} --release -p release_test --bin release_test -- -C lto
+
+        #cargo rustc --target ${{ matrix.target }} --release -p jormungandr --bin jormungandr -- -C lto,
+        #cargo rustc --target ${{ matrix.target }} --release -p jormungandr --bin jcli        -- -C lto
 
       - name: Pack asset
         uses: montudor/action-zip@v0.1.0
