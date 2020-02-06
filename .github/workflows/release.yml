@@ -68,7 +68,7 @@ jobs:
     steps:
       - uses: actions-rs/toolchain@v1
         with:
-          toolchain:  ${{ matrix.rust_toolchain }}
+          toolchain: stable
           override: true
 
       - name: Checkout code
