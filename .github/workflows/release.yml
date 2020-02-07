@@ -32,37 +32,20 @@ jobs:
       matrix:
         config:
         # Linux
-        - {os: ubuntu-latest, target: arm-unknown-linux-gnueabi}
-        - {os: ubuntu-latest, target: armv7-unknown-linux-gnueabihf}
-        - {os: ubuntu-latest, target: mips64el-unknown-linux-gnuabi64}
-        - {os: ubuntu-latest, target: powerpc64le-unknown-linux-gnu}
-        - {os: ubuntu-latest, target: x86_64-unknown-linux-musl}
-        - {os: ubuntu-latest, target: aarch64-linux-android}
+        - {os: ubuntu-latest, target: arm-unknown-linux-gnueabi, disable_tests: 1}
+        - {os: ubuntu-latest, target: armv7-unknown-linux-gnueabihf, disable_tests: 1}
+        - {os: ubuntu-latest, target: mips64el-unknown-linux-gnuabi64, disable_tests: 1}
+        - {os: ubuntu-latest, target: powerpc64le-unknown-linux-gnu, disable_tests: 1}
+        - {os: ubuntu-latest, target: x86_64-unknown-linux-musl, disable_tests: 0}
+        - {os: ubuntu-latest, target: aarch64-linux-android, disable_tests: 0}
         # Macos
-        - {os: macos-latest, target: x86_64-unknown-linux-gnu}
-        - {os: macos-latest, target: aarch64-unknown-linux-gnu}
-        - {os: macos-latest, target: x86_64-apple-darwin}
+        - {os: macos-latest, target: x86_64-unknown-linux-gnu, disable_tests: 0}
+        - {os: macos-latest, target: aarch64-unknown-linux-gnu, disable_tests: 1}
+        - {os: macos-latest, target: x86_64-apple-darwin, disable_tests: 0}
         # Windows
-        - {os: windows-latest, target: x86_64-pc-windows-gnu}
-        - {os: windows-latest, target: x86_64-pc-windows-msvc}
+        - {os: windows-latest, target: x86_64-pc-windows-gnu, disable_tests: 0}
+        - {os: windows-latest, target: x86_64-pc-windows-msvc, disable_tests: 0}
         toolchain: [stable]
-#        include:
-#          - conifg.os: ubuntu-latest
-#            target: arm-unknown-linux-gnueabi
-##            target: [
-##              arm-unknown-linux-gnueabi,
-##              armv7-unknown-linux-gnueabihf,
-##              mips64el-unknown-linux-gnuabi64,
-##              powerpc64le-unknown-linux-gnu,
-##              x86_64-unknown-linux-musl,
-##            ]
-#            env:
-#              DISABLE_TESTS: 1
-#
-#          - config.os: macos-latest
-#            target: aarch64-unknown-linux-gnu
-#            env:
-#              DISABLE_TESTS: 1
 
     steps:
       - uses: actions-rs/toolchain@v1
@@ -77,6 +60,8 @@ jobs:
 
       - name: Build project
         uses: actions-rs/cargo@v1
+        env:
+          DISABLE_TESTS: ${{ matrix.config.disable_tests }}
         with:
           command: rustc
           args: --release -p release_test --bin release_test -- -C lto
