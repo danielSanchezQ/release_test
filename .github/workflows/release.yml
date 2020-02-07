@@ -114,6 +114,9 @@ jobs:
         id: get_release_url
         run: echo "::set-output name=RELEASE_URL::$(cat ./release_url/release_url.txt)"
 
+      - name: Print release_url test
+        run: echo ${{ steps.get_release_url.outputs.RELEASE_URL }}
+
       - name: Pack asset
         uses: montudor/action-zip@v0.1.0
         with:
