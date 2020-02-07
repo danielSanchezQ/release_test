@@ -101,7 +101,7 @@ jobs:
 
       - name: Pack asset if windows
         if: matrix.config.os == 'windows-latest'
-        run: compress-archive target/release/release_test release_test-${{ steps.get_version.outputs.VERSION }}-${{ matrix.config.target }}.zip
+        run: compress-archive ./target/release/release_test release_test-${{ steps.get_version.outputs.VERSION }}-${{ matrix.config.target }}.zip
 
       - name: Pack asset if macos
         if: matrix.config.os == 'macos-latest'
