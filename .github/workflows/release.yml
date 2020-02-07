@@ -94,13 +94,13 @@ jobs:
 
       - name: Pack asset if linux
         uses: montudor/action-zip@v0.1.0
-        if: matrix.config.os != windows-latest
+        if: matrix.config.os != 'windows-latest'
         with:
           args: zip --junk-paths release_test-${{ steps.get_version.outputs.VERSION }}-${{ matrix.config.target }}.zip ./target/release/release_test
         #run: zip --junk-paths jormungandr-${{ github.ref }}-${{ matrix.target }}.zip ./target/release/jormungandr ./target/release/jcli
 
       - name: Pack asset if windows
-        if: matrix.config.os == windows-latest
+        if: matrix.config.os == 'windows-latest'
         run: compress-archive target/release/release_test release_test-${{ steps.get_version.outputs.VERSION }}-${{ matrix.config.target }}.zip
 
       - name: Upload binaries to release
