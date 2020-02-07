@@ -92,26 +92,24 @@ jobs:
         id: get_version
         run: echo ::set-output name=VERSION::``${GITHUB_REF#refs/tags/}``
 
-      - name: Pack asset if linux
-        uses: montudor/action-zip@v0.1.0
-        if: matrix.config.os == 'ubuntu-latest'
-        with:
-          args: zip --junk-paths release_test-${{ steps.get_version.outputs.VERSION }}-${{ matrix.config.target }}.zip ./target/release/release_test
+      - name: Pack asset if unix
+        if: matrix.config.os != 'windows-latest'
+        run: tar -czvf release_test-${{ steps.get_version.outputs.VERSION }}-${{ matrix.config.target }}.tar.gz ./target/release/release_test
         #run: zip --junk-paths jormungandr-${{ github.ref }}-${{ matrix.target }}.zip ./target/release/jormungandr ./target/release/jcli
 
       - name: Pack asset if windows
         if: matrix.config.os == 'windows-latest'
         run: compress-archive ./target/release/release_test.exe release_test-${{ steps.get_version.outputs.VERSION }}-${{ matrix.config.target }}.zip
 
-      - name: Pack asset if macos
-        if: matrix.config.os == 'macos-latest'
-        run: zip -r -X release_test-${{ steps.get_version.outputs.VERSION }}-${{ matrix.config.target }}.zip ./target/release/release_test
+#      - name: Pack asset if macos
+#        if: matrix.config.os == 'macos-latest'
+#        run: zip -r -X release_test-${{ steps.get_version.outputs.VERSION }}-${{ matrix.config.target }}.zip ./target/release/release_test
 
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v1-release
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: release_test-${{ steps.get_version.outputs.VERSION }}-${{ matrix.config.target }}.zip
-          asset_name: release_test-${{ steps.get_version.outputs.VERSION }}-${{ matrix.config.target }}.zip
+          file: release_test-${{ steps.get_version.outputs.VERSION }}-${{ matrix.config.target }}.*
+          asset_name: release_test-${{ steps.get_version.outputs.VERSION }}-${{ matrix.config.target }}
           tag: ${{ github.ref }}
           overwrite: true
