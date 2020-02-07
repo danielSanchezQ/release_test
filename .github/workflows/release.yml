@@ -112,4 +112,5 @@ jobs:
           file: release_test-${{ steps.get_version.outputs.VERSION }}-${{ matrix.config.target }}.*
           asset_name: release_test-${{ steps.get_version.outputs.VERSION }}-${{ matrix.config.target }}
           tag: ${{ github.ref }}
+          file_glob: true
           overwrite: true
