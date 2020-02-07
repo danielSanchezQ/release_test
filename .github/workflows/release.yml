@@ -125,12 +125,12 @@ jobs:
 
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v1-release
-          with:
-            repo_token: ${{ secrets.GITHUB_TOKEN }}
-            file: release_test-${{ steps.get_version.outputs.VERSION }}-${{ matrix.config.target }}.zip
-            asset_name: release_test-${{ steps.get_version.outputs.VERSION }}-${{ matrix.config.target }}.zip
-            tag: ${{ github.ref }}
-            overwrite: true
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: release_test-${{ steps.get_version.outputs.VERSION }}-${{ matrix.config.target }}.zip
+          asset_name: release_test-${{ steps.get_version.outputs.VERSION }}-${{ matrix.config.target }}.zip
+          tag: ${{ github.ref }}
+          overwrite: true
 #      - name: Upload Release Asset
 #        id: upload-release-asset
 #        uses: actions/upload-release-asset@v1.0.1
